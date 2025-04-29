@@ -1,0 +1,64 @@
+
+openapi: 3.0.1
+info:
+  title: Busca Científica Semantic Scholar
+  description: Busca artigos científicos por palavras-chave, retornando título, resumo, ano, autores e URL.
+  version: "1.0"
+servers:
+  - url: https://api.semanticscholar.org/graph/v1
+paths:
+  /paper/search:
+    get:
+      operationId: searchPapers
+      summary: Buscar artigos científicos por tema
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Termos da busca (ex: "dor nociplástica")
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: Número de resultados (padrão = 5)
+          schema:
+            type: integer
+            default: 5
+        - name: fields
+          in: query
+          required: false
+          description: Campos desejados na resposta
+          schema:
+            type: string
+            default: title,abstract,year,authors,url
+      responses:
+        '200':
+          description: Lista de artigos científicos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        abstract:
+                          type: string
+                        year:
+                          type: integer
+                        authors:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                        url:
+                          type: string
